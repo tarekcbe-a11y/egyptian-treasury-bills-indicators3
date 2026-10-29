@@ -1,0 +1,769 @@
+
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#080808">
+<title>مؤشرات أذون الخزانة المصرية</title>
+
+<style>
+:root{
+  --bg:#101010;
+  --panel:#181818;
+  --gold:#d5b13d;
+  --light:#f4d875;
+  --muted:#b8b8b8;
+  --line:#8d793b;
+  --green:#42d987;
+  --red:#ff7777;
+}
+*{box-sizing:border-box}
+html,body{
+  margin:0;
+  min-height:100%;
+  width:100%;
+  background:#080808;
+  color:#f2f2f2;
+  font-family:Tahoma,Arial,sans-serif;
+}
+body{padding:5px;line-height:1.45}
+button{font:inherit;cursor:pointer}
+.app{
+  width:100%;
+  max-width:520px;
+  min-height:calc(100dvh - 10px);
+  margin:auto;
+  background:var(--bg);
+  border:1.5px solid var(--gold);
+  border-radius:17px;
+  overflow:hidden;
+  display:flex;
+  flex-direction:column;
+  box-shadow:0 0 16px rgba(213,177,61,.09);
+}
+
+/* الهيدر */
+.header{
+  direction:ltr;
+  display:grid;
+  grid-template-columns:48px minmax(0,1fr) auto;
+  align-items:center;
+  gap:8px;
+  padding:12px 10px;
+  background:#0b0b0b;
+  border-bottom:2px solid var(--gold);
+  min-width:0;
+}
+.logo{
+  width:44px;
+  height:44px;
+  object-fit:contain;
+  display:block;
+}
+.header-info{
+  direction:rtl;
+  text-align:center;
+  min-width:0;
+}
+.brand{
+  font-size:clamp(14px,3.8vw,21px);
+  font-weight:800;
+  color:var(--gold);
+  line-height:1.5;
+  text-align:center;
+}
+.group-name{
+  font-size:11px;
+  color:#f2d879;
+  margin-top:2px;
+  text-align:center;
+}
+.subtitle{
+  font-size:9px;
+  color:#c9c9c9;
+  margin-top:3px;
+  line-height:1.5;
+  text-align:center;
+}
+.status{
+  direction:rtl;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:3px;
+  white-space:nowrap;
+  font-size:9px;
+  color:#baf5d0;
+  text-align:center;
+}
+.status-dot{font-size:10px}
+
+main{
+  padding:9px 8px;
+  flex:1;
+  min-height:0;
+  background:#101010;
+}
+.page{display:none}
+.page.active{display:block}
+
+.actions{
+  display:grid;
+  grid-template-columns:1fr;
+  gap:6px;
+  margin-bottom:10px;
+}
+.btn,.term{
+  border:1px solid var(--gold);
+  background:#181818;
+  color:var(--gold);
+  border-radius:9px;
+  font-weight:700;
+  padding:8px 5px;
+  min-width:0;
+}
+.btn{
+  min-height:39px;
+  font-size:13px;
+}
+.btn:active,.term:active{
+  transform:scale(.99);
+}
+.heading{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:5px;
+  margin:10px 0 8px;
+  padding-right:8px;
+  border-right:3px solid var(--gold);
+  font-size:16px;
+  font-weight:800;
+  color:var(--gold);
+}
+.note{
+  font-size:10px;
+  color:var(--muted);
+  font-weight:400;
+}
+.terms{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:6px;
+  margin:9px 0 10px;
+}
+.term{
+  min-height:37px;
+  font-size:12px;
+  padding:6px 2px;
+}
+.term.active{
+  background:var(--gold);
+  color:#111111;
+  border-color:var(--gold);
+}
+
+.table-card{
+  border:1px solid var(--gold);
+  border-radius:12px;
+  overflow:hidden;
+  background:#181818;
+}
+.table-title{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:5px;
+  padding:8px 7px;
+  background:#0b0b0b;
+  border-bottom:1px solid var(--gold);
+  font-size:12px;
+  font-weight:700;
+  color:var(--gold);
+}
+.count{
+  font-size:10px;
+  color:#e4d7a8;
+  white-space:nowrap;
+  font-weight:400;
+}
+.table-scroll{
+  height:clamp(210px,38dvh,330px);
+  overflow-y:auto;
+  overflow-x:auto;
+  overscroll-behavior:contain;
+  scrollbar-width:thin;
+  scrollbar-color:#d5b13d #292929;
+}
+table{
+  width:100%;
+  min-width:300px;
+  border-collapse:collapse;
+  table-layout:fixed;
+  text-align:center;
+}
+th{
+  position:sticky;
+  top:0;
+  z-index:1;
+  background:#151515;
+  color:#f4d875;
+  font-size:clamp(9px,2.6vw,11px);
+  padding:8px 2px;
+  border:1px solid #9d8337;
+  line-height:1.4;
+  overflow-wrap:anywhere;
+}
+td{
+  background:#292929;
+  color:#f1f1f1;
+  font-size:clamp(9px,2.65vw,12px);
+  font-weight:700;
+  padding:9px 2px;
+  border:1px solid #55504a;
+  line-height:1.4;
+  overflow-wrap:anywhere;
+}
+tbody tr:nth-child(even) td{
+  background:#222222;
+}
+tbody tr:hover td{
+  background:#353126;
+}
+th,td{width:25%}
+td.session{color:#f0d575}
+td.yield{color:var(--green);font-weight:800}
+.message{
+  padding:18px 5px;
+  color:var(--muted);
+  font-size:11px;
+  text-align:center;
+}
+.message.error{color:var(--red)}
+
+/* منطقة الإعلان دون كتابة */
+.ad{
+  margin:10px 0 5px;
+  min-height:50px;
+  border:1px dashed #6f6137;
+  border-radius:10px;
+  background:#141414;
+}
+
+.info-card{
+  margin:8px 0;
+  border:1px solid var(--gold);
+  border-radius:10px;
+  background:#1b1b1b;
+  padding:10px 9px;
+}
+.info-card h3{
+  margin:0 0 5px;
+  color:var(--gold);
+  font-size:13px;
+}
+.info-card p{
+  margin:0;
+  color:#eeeeee;
+  font-size:12px;
+  line-height:1.8;
+}
+.footer{
+  text-align:center;
+  background:#0b0b0b;
+  border-top:1px solid var(--gold);
+  padding:6px;
+}
+.developer{
+  font-size:9px;
+  color:#b8b8b8;
+}
+
+/* الأيقونات الثلاثة في صف واحد */
+.nav{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:4px;
+  background:#0b0b0b;
+  border-top:1px solid var(--gold);
+  padding:5px;
+  padding-bottom:max(5px,env(safe-area-inset-bottom));
+}
+.nav button{
+  background:transparent;
+  color:#b8b8b8;
+  border:0;
+  border-radius:9px;
+  padding:5px 2px;
+  font-size:11px;
+  min-height:49px;
+}
+.nav button span{
+  display:block;
+  font-size:18px;
+  line-height:1.2;
+  margin-bottom:3px;
+}
+.nav button.active{
+  background:#302816;
+  color:var(--gold);
+}
+
+@media(max-width:360px){
+  body{padding:3px}
+  .app{
+    min-height:calc(100dvh - 6px);
+    border-radius:13px;
+  }
+  main{padding:7px 5px}
+  .header{
+    grid-template-columns:36px minmax(0,1fr) auto;
+    gap:5px;
+    padding:10px 5px;
+  }
+  .logo{width:35px;height:35px}
+  .brand{font-size:13px}
+  .group-name{font-size:9px}
+  .subtitle{font-size:8px}
+  .status{font-size:8px;gap:2px}
+  .heading{font-size:14px}
+  .term{font-size:11px;min-height:35px}
+  .table-title{font-size:11px}
+  .nav button{font-size:10px;min-height:46px}
+}
+</style>
+
+</head>
+
+<body>
+<div class="app">
+
+<header class="header">
+  <img
+    class="logo"
+    src="./logo.png"
+    alt="شعار جروب عملاء البنوك المصرية"
+    onerror="this.style.display='none'"
+  >
+
+  <div class="header-info">
+    <div class="brand">مؤشرات أذون الخزانة المصرية</div>
+    <div class="group-name">جروب عملاء البنوك المصرية</div>
+    <div class="subtitle">
+      متابعة نتائج العطاءات والعوائد وفق البيانات الرسمية
+    </div>
+  </div>
+
+  <div class="status" id="status">
+    <span class="status-dot">●</span>
+    <span>جاري الاتصال</span>
+  </div>
+</header>
+
+<main>
+
+<!-- الرئيسية -->
+<section class="page active" id="home">
+
+  <div class="actions">
+    <button class="btn" onclick="fetchData()">⟳ تحديث البيانات</button>
+  </div>
+
+  <div class="heading">
+    <span>الرئيسية</span>
+    <span class="note" id="updated">—</span>
+  </div>
+
+  <div class="terms" id="terms-main"></div>
+
+  <div class="table-card">
+    <div class="table-title">
+      <span id="main-title">سجل النتائج</span>
+      <span class="count" id="main-count">0 نتيجة</span>
+    </div>
+
+    <div class="table-scroll">
+      <table>
+        <thead>
+          <tr>
+            <th>تاريخ الجلسة</th>
+            <th>تاريخ الإصدار</th>
+            <th>تاريخ الاستحقاق</th>
+            <th>متوسط العائد %</th>
+          </tr>
+        </thead>
+        <tbody id="main-body">
+          <tr>
+            <td colspan="4" class="message">جاري تحميل البيانات...</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="ad"></div>
+</section>
+
+<!-- التاريخية -->
+<section class="page" id="history">
+
+  <div class="actions">
+    <button class="btn" onclick="fetchData()">⟳ تحديث البيانات</button>
+  </div>
+
+  <div class="heading">البيانات التاريخية</div>
+  <p class="note">اختر أجلًا لعرض سجلاته المتاحة من المصدر.</p>
+
+  <div class="terms" id="terms-history"></div>
+
+  <div class="table-card">
+    <div class="table-title">
+      <span id="history-title">السجل التاريخي</span>
+      <span class="count" id="history-count">0 نتيجة</span>
+    </div>
+
+    <div class="table-scroll">
+      <table>
+        <thead>
+          <tr>
+            <th>تاريخ الجلسة</th>
+            <th>تاريخ الإصدار</th>
+            <th>تاريخ الاستحقاق</th>
+            <th>متوسط العائد %</th>
+          </tr>
+        </thead>
+        <tbody id="history-body">
+          <tr>
+            <td colspan="4" class="message">جاري تحميل البيانات...</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="ad"></div>
+</section>
+
+<!-- الدليل -->
+<section class="page" id="guide">
+
+  <div class="heading">دليل أذون الخزانة</div>
+
+  <div class="info-card">
+    <h3>تاريخ الجلسة</h3>
+    <p>التاريخ الذي أُجري فيه العطاء وأُعلنت نتائجه.</p>
+  </div>
+
+  <div class="info-card">
+    <h3>تاريخ الإصدار</h3>
+    <p>التاريخ الذي يبدأ منه إصدار أذون الخزانة وفق بيانات العطاء.</p>
+  </div>
+
+  <div class="info-card">
+    <h3>تاريخ الاستحقاق</h3>
+    <p>التاريخ المحدد لانتهاء أجل الإذن وسداد قيمته الاسمية وفق شروط الإصدار.</p>
+  </div>
+
+  <div class="info-card">
+    <h3>متوسط العائد</h3>
+    <p>متوسط العائد المنشور لنتيجة العطاء، كما يرد في جدول المصدر.</p>
+  </div>
+
+  <div class="ad"></div>
+</section>
+
+</main>
+
+<footer class="footer">
+  <div class="developer">Developed by Tarek Metwally</div>
+</footer>
+
+<nav class="nav">
+  <button class="active" data-nav="home" onclick="go('home')">
+    <span>⌂</span>الرئيسية
+  </button>
+
+  <button data-nav="history" onclick="go('history')">
+    <span>▤</span>التاريخية
+  </button>
+
+  <button data-nav="guide" onclick="go('guide')">
+    <span>ⓘ</span>الدليل
+  </button>
+</nav>
+
+</div>
+
+<script>
+const csvUrl =
+"https://docs.google.com/spreadsheets/d/e/2PACX-1vQp4jGbTtNydAA3tCX7s3W_xhVPnMCkgiR-xpCvCFoNbhcta59z3sWQPwcCaPoO3FTEEEazLDaeoOjZ/pub?gid=0&single=true&output=csv";
+
+const TERMS = [
+  {key:"91",label:"91 يوم"},
+  {key:"182",label:"182 يوم"},
+  {key:"273",label:"273 يوم"},
+  {key:"364",label:"364 يوم"},
+  {key:"357",label:"357 يوم"},
+  {key:"other",label:"مدد أخرى"}
+];
+
+let data = [];
+let selected = "182";
+let histSelected = "182";
+
+function go(id){
+  document.querySelectorAll(".page").forEach(page=>{
+    page.classList.toggle("active",page.id===id);
+  });
+
+  document.querySelectorAll(".nav button").forEach(button=>{
+    button.classList.toggle("active",button.dataset.nav===id);
+  });
+
+  if(id==="home") renderMain();
+  if(id==="history") renderHistory();
+
+  window.scrollTo({top:0,behavior:"auto"});
+}
+
+function parseCSV(text){
+  const rows=[];
+  let row=[],value="",quoted=false;
+
+  text=text.replace(/^\uFEFF/,"");
+
+  for(let i=0;i<text.length;i++){
+    const c=text[i];
+
+    if(c==='"'){
+      if(quoted && text[i+1]==='"'){
+        value+='"';
+        i++;
+      }else{
+        quoted=!quoted;
+      }
+    }else if(c==="," && !quoted){
+      row.push(value.trim());
+      value="";
+    }else if((c==="\n" || c==="\r") && !quoted){
+      if(c==="\r" && text[i+1]==="\n") i++;
+      row.push(value.trim());
+
+      if(row.some(item=>item!=="")) rows.push(row);
+
+      row=[];
+      value="";
+    }else{
+      value+=c;
+    }
+  }
+
+  if(value!=="" || row.length){
+    row.push(value.trim());
+    if(row.some(item=>item!=="")) rows.push(row);
+  }
+
+  return rows;
+}
+
+function normalizeTerm(value){
+  const digits = String(value||"")
+    .replace(/[٠-٩]/g,d=>String("٠١٢٣٤٥٦٧٨٩".indexOf(d)))
+    .replace(/[۰-۹]/g,d=>String("۰۱۲۳۴۵۶۷۸۹".indexOf(d)));
+
+  const match=digits.trim().match(/\d+/);
+  return match ? match[0] : digits.trim();
+}
+
+function isOther(termValue){
+  return !["91","182","273","364","357"].includes(termValue);
+}
+
+function dateNum(value){
+  const s=String(value||"").trim();
+  let m=s.match(/^(\d{4})[/-](\d{1,2})[/-](\d{1,2})$/);
+
+  if(m){
+    return new Date(+m[1],+m[2]-1,+m[3]).getTime();
+  }
+
+  m=s.match(/^(\d{1,2})[/-](\d{1,2})[/-](\d{4})$/);
+
+  if(m){
+    return new Date(+m[3],+m[2]-1,+m[1]).getTime();
+  }
+
+  return 0;
+}
+
+function rowsFor(termValue){
+  return data
+    .filter(row=>termValue==="other"
+      ? isOther(row.term)
+      : row.term===termValue)
+    .slice()
+    .sort((a,b)=>dateNum(b.session)-dateNum(a.session));
+}
+
+function esc(value){
+  return String(value??"").replace(/[&<>"']/g,c=>({
+    "&":"&amp;",
+    "<":"&lt;",
+    ">":"&gt;",
+    '"':"&quot;",
+    "'":"&#39;"
+  })[c]);
+}
+
+function drawTerms(containerId,selectedKey,callback){
+  const container=document.getElementById(containerId);
+
+  container.innerHTML=TERMS.map(term=>`
+    <button class="term ${term.key===selectedKey?"active":""}"
+      data-term="${term.key}">
+      ${term.label}
+    </button>
+  `).join("");
+
+  container.querySelectorAll("button").forEach(button=>{
+    button.onclick=()=>callback(button.dataset.term);
+  });
+}
+
+function tableRows(rows){
+  if(!rows.length){
+    return `<tr><td colspan="4" class="message">
+      لا توجد نتائج مسجلة لهذا الأجل في البيانات المحمّلة.
+    </td></tr>`;
+  }
+
+  return rows.map(row=>{
+    let yieldValue=String(row.yield||"").trim();
+
+    if(yieldValue && !yieldValue.includes("%")){
+      yieldValue+="%";
+    }
+
+    return `<tr>
+      <td class="session">${esc(row.session)}</td>
+      <td>${esc(row.issue)}</td>
+      <td>${esc(row.maturity)}</td>
+      <td class="yield">${esc(yieldValue)}</td>
+    </tr>`;
+  }).join("");
+}
+
+function renderMain(){
+  drawTerms("terms-main",selected,value=>{
+    selected=value;
+    renderMain();
+  });
+
+  const rows=rowsFor(selected);
+  const termInfo=TERMS.find(term=>term.key===selected);
+
+  document.getElementById("main-title").textContent=
+    "سجل نتائج أجل "+termInfo.label;
+
+  document.getElementById("main-count").textContent=
+    rows.length+" نتيجة";
+
+  document.getElementById("main-body").innerHTML=tableRows(rows);
+}
+
+function renderHistory(){
+  drawTerms("terms-history",histSelected,value=>{
+    histSelected=value;
+    renderHistory();
+  });
+
+  const rows=rowsFor(histSelected);
+  const termInfo=TERMS.find(term=>term.key===histSelected);
+
+  document.getElementById("history-title").textContent=
+    "السجل التاريخي — "+termInfo.label;
+
+  document.getElementById("history-count").textContent=
+    rows.length+" نتيجة";
+
+  document.getElementById("history-body").innerHTML=tableRows(rows);
+}
+
+async function fetchData(){
+  const status=document.getElementById("status");
+
+  status.innerHTML=
+    '<span class="status-dot">●</span><span>جاري التحديث</span>';
+  status.style.color="#f1d86b";
+
+  try{
+    const response=await fetch(csvUrl,{cache:"no-store"});
+
+    if(!response.ok){
+      throw new Error("HTTP "+response.status);
+    }
+
+    const text=await response.text();
+
+    if(text.trim().startsWith("<")){
+      throw new Error("المصدر لم يُرجع بيانات CSV");
+    }
+
+    const rows=parseCSV(text);
+
+    if(rows.length<2){
+      throw new Error("لا توجد بيانات");
+    }
+
+    const newData=rows.slice(1)
+      .filter(row=>row.length>=6)
+      .map(row=>({
+        term:normalizeTerm(row[1]),
+        session:String(row[2]||"").trim(),
+        issue:String(row[3]||"").trim(),
+        maturity:String(row[4]||"").trim(),
+        yield:String(row[5]||"").trim()
+      }))
+      .filter(row=>row.term && row.session && row.yield);
+
+    data=newData;
+
+    status.innerHTML=
+      '<span class="status-dot">●</span><span>متصل بالمصدر</span>';
+    status.style.color="#21d88a";
+
+    document.getElementById("updated").textContent=
+      "تحديث "+new Date().toLocaleTimeString("ar-EG",{
+        hour:"2-digit",
+        minute:"2-digit"
+      });
+
+    renderMain();
+    renderHistory();
+
+  }catch(error){
+    console.error(error);
+
+    status.innerHTML=
+      '<span class="status-dot">●</span><span>تعذّر الاتصال</span>';
+    status.style.color="#ff7777";
+
+    if(!data.length){
+      const message=`<tr><td colspan="4" class="message error">
+        تعذر تحميل البيانات. تأكد من نشر جدول Google Sheets للعامة بصيغة CSV.
+      </td></tr>`;
+
+      document.getElementById("main-body").innerHTML=message;
+      document.getElementById("history-body").innerHTML=message;
+    }
+  }
+}
+
+renderMain();
+renderHistory();
+fetchData();
+</script>
+
+</body>
+</html>
