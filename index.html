@@ -9,11 +9,11 @@
 
 <style>
 :root{
-  --bg:#101010;
-  --panel:#181818;
+  --bg:#0c1730;
+  --panel:#14213d;
   --gold:#d5b13d;
   --light:#f4d875;
-  --muted:#b8b8b8;
+  --muted:#b8c2d5;
   --line:#8d793b;
   --green:#42d987;
   --red:#ff7777;
@@ -23,7 +23,7 @@ html,body{
   margin:0;
   min-height:100%;
   width:100%;
-  background:#080808;
+  background:#080f20;
   color:#f2f2f2;
   font-family:Tahoma,Arial,sans-serif;
 }
@@ -40,7 +40,7 @@ button{font:inherit;cursor:pointer}
   overflow:hidden;
   display:flex;
   flex-direction:column;
-  box-shadow:0 0 16px rgba(213,177,61,.09);
+  box-shadow:0 0 16px rgba(213,177,61,.12);
 }
 
 /* الهيدر */
@@ -51,7 +51,7 @@ button{font:inherit;cursor:pointer}
   align-items:center;
   gap:8px;
   padding:12px 10px;
-  background:#0b0b0b;
+  background:#101d38;
   border-bottom:2px solid var(--gold);
   min-width:0;
 }
@@ -75,13 +75,13 @@ button{font:inherit;cursor:pointer}
 }
 .group-name{
   font-size:11px;
-  color:#f2d879;
+  color:#f4d875;
   margin-top:2px;
   text-align:center;
 }
 .subtitle{
   font-size:9px;
-  color:#c9c9c9;
+  color:#c9d3e5;
   margin-top:3px;
   line-height:1.5;
   text-align:center;
@@ -103,7 +103,7 @@ main{
   padding:9px 8px;
   flex:1;
   min-height:0;
-  background:#101010;
+  background:#0c1730;
 }
 .page{display:none}
 .page.active{display:block}
@@ -116,7 +116,7 @@ main{
 }
 .btn,.term{
   border:1px solid var(--gold);
-  background:#181818;
+  background:#172746;
   color:var(--gold);
   border-radius:9px;
   font-weight:700;
@@ -160,15 +160,15 @@ main{
 }
 .term.active{
   background:var(--gold);
-  color:#111111;
-  border-color:var(--gold);
+  color:#101a2d;
+  border-color:var(--light);
 }
 
 .table-card{
   border:1px solid var(--gold);
   border-radius:12px;
   overflow:hidden;
-  background:#181818;
+  background:#14213d;
 }
 .table-title{
   display:flex;
@@ -176,7 +176,7 @@ main{
   align-items:center;
   gap:5px;
   padding:8px 7px;
-  background:#0b0b0b;
+  background:#101d38;
   border-bottom:1px solid var(--gold);
   font-size:12px;
   font-weight:700;
@@ -194,7 +194,7 @@ main{
   overflow-x:auto;
   overscroll-behavior:contain;
   scrollbar-width:thin;
-  scrollbar-color:#d5b13d #292929;
+  scrollbar-color:#d5b13d #172746;
 }
 table{
   width:100%;
@@ -207,7 +207,7 @@ th{
   position:sticky;
   top:0;
   z-index:1;
-  background:#151515;
+  background:#1a2b4b;
   color:#f4d875;
   font-size:clamp(9px,2.6vw,11px);
   padding:8px 2px;
@@ -216,20 +216,20 @@ th{
   overflow-wrap:anywhere;
 }
 td{
-  background:#292929;
-  color:#f1f1f1;
+  background:#192b49;
+  color:#f1f4fa;
   font-size:clamp(9px,2.65vw,12px);
   font-weight:700;
   padding:9px 2px;
-  border:1px solid #55504a;
+  border:1px solid #42516b;
   line-height:1.4;
   overflow-wrap:anywhere;
 }
 tbody tr:nth-child(even) td{
-  background:#222222;
+  background:#14233e;
 }
 tbody tr:hover td{
-  background:#353126;
+  background:#293b59;
 }
 th,td{width:25%}
 td.session{color:#f0d575}
@@ -246,16 +246,16 @@ td.yield{color:var(--green);font-weight:800}
 .ad{
   margin:10px 0 5px;
   min-height:50px;
-  border:1px dashed #6f6137;
+  border:1px dashed #8d793b;
   border-radius:10px;
-  background:#141414;
+  background:#111e38;
 }
 
 .info-card{
   margin:8px 0;
   border:1px solid var(--gold);
   border-radius:10px;
-  background:#1b1b1b;
+  background:#142440;
   padding:10px 9px;
 }
 .info-card h3{
@@ -271,13 +271,13 @@ td.yield{color:var(--green);font-weight:800}
 }
 .footer{
   text-align:center;
-  background:#0b0b0b;
+  background:#101d38;
   border-top:1px solid var(--gold);
   padding:6px;
 }
 .developer{
   font-size:9px;
-  color:#b8b8b8;
+  color:#b8c2d5;
 }
 
 /* الأيقونات الثلاثة في صف واحد */
@@ -285,14 +285,14 @@ td.yield{color:var(--green);font-weight:800}
   display:grid;
   grid-template-columns:repeat(3,minmax(0,1fr));
   gap:4px;
-  background:#0b0b0b;
+  background:#101d38;
   border-top:1px solid var(--gold);
   padding:5px;
   padding-bottom:max(5px,env(safe-area-inset-bottom));
 }
 .nav button{
   background:transparent;
-  color:#b8b8b8;
+  color:#b8c2d5;
   border:0;
   border-radius:9px;
   padding:5px 2px;
@@ -306,7 +306,7 @@ td.yield{color:var(--green);font-weight:800}
   margin-bottom:3px;
 }
 .nav button.active{
-  background:#302816;
+  background:#29334a;
   color:var(--gold);
 }
 
@@ -767,3 +767,4 @@ fetchData();
 
 </body>
 </html>
+
